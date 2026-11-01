@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Zone Management | SmartCity360</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 950: "#101a2d", 900: "#17243a", 800: "#24344e" },
+            brand: { 50: "#eff6ff", 100: "#dbeafe", 500: "#3478f6", 600: "#2463eb" }
+          },
+          fontFamily: { sans: ["DM Sans", "sans-serif"], display: ["Manrope", "sans-serif"] }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="zone-management.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <a class="brand-lockup" href="#" aria-label="SmartCity360 home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M5 25V14l6 3V9l7 4V5h9v20H5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M21 10h2M21 15h2M9 22v-2m6 2v-2m6 7v-4h3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span><strong>SmartCity<span>360</span></strong><small>ADMIN CONSOLE</small></span>
+      </a>
+      <div class="nav-caption">WORKSPACE</div>
+      <nav class="side-nav">
+        <a href="#" class="nav-link"><span class="nav-icon">▦</span>Overview</a>
+        <a href="#" class="nav-link active" aria-current="page"><span class="nav-icon">⌘</span>Zone management</a>
+        <a href="#" class="nav-link"><span class="nav-icon">ϟ</span>Energy &amp; power</a>
+        <a href="#" class="nav-link"><span class="nav-icon">▤</span>Meter readings</a>
+        <a href="#" class="nav-link"><span class="nav-icon">◷</span>Reports</a>
+      </nav>
+      <div class="nav-caption nav-caption-spaced">ADMINISTRATION</div>
+      <nav class="side-nav">
+        <a href="#" class="nav-link"><span class="nav-icon">♙</span>Users &amp; roles</a>
+        <a href="#" class="nav-link"><span class="nav-icon">⚙</span>Settings</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card">
+          <span class="help-icon">?</span>
+          <strong>Need a hand?</strong>
+          <p>Visit the admin help center for guidance.</p>
+          <a href="#">Open help center <span aria-hidden="true">→</span></a>
+        </div>
+        <button class="profile-button" type="button">
+          <span class="avatar">AM</span>
+          <span class="profile-copy"><strong>Admin Manager</strong><small>Super administrator</small></span>
+          <span class="profile-more" aria-hidden="true">•••</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenuButton" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+        <div class="topbar-context"><span class="topbar-dot"></span>Colombo Metropolitan Area <span class="context-chevron">⌄</span></div>
+        <div class="topbar-actions">
+          <span class="system-status"><i></i> All systems operational</span>
+          <button class="icon-button notification-button" type="button" aria-label="Notifications">♧<span class="notification-dot"></span></button>
+          <span class="topbar-avatar" aria-label="Admin Manager">AM</span>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="#">Dashboard</a><span>›</span><a href="#">Infrastructure</a><span>›</span><strong>Zone Management</strong>
+        </div>
+        <section class="page-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span>INFRASTRUCTURE</div>
+            <h1>Zone Management</h1>
+            <p>Manage city zones, monitor power status, and generate energy usage reports.</p>
+          </div>
+          <div class="heading-actions">
+            <button type="button" class="button button-secondary" id="refreshButton"><span aria-hidden="true">↻</span> Refresh data</button>
+            <span class="data-mode"><span></span> Prototype data</span>
+          </div>
+        </section>
+
+        <section class="summary-grid" aria-label="Zone summary">
+          <article class="summary-card"><span class="summary-icon city-icon">⌂</span><div><span class="summary-label">Total cities</span><strong id="totalCities">—</strong><small>Across the network</small></div></article>
+          <article class="summary-card"><span class="summary-icon district-icon">▦</span><div><span class="summary-label">Total districts</span><strong id="totalDistricts">—</strong><small>Administrative areas</small></div></article>
+          <article class="summary-card"><span class="summary-icon street-icon">⌁</span><div><span class="summary-label">Total streets</span><strong id="totalStreets">—</strong><small>Connected streets</small></div></article>
+          <article class="summary-card"><span class="summary-icon building-icon">▥</span><div><span class="summary-label">Total buildings</span><strong id="totalBuildings">—</strong><small>Metered properties</small></div></article>
+          <article class="summary-card state-summary"><span class="summary-icon on-icon">ϟ</span><div><span class="summary-label">Zones currently on</span><strong id="zonesOn">—</strong><small><span class="status-dot on"></span>Power active</small></div></article>
+          <article class="summary-card state-summary"><span class="summary-icon off-icon">ϟ</span><div><span class="summary-label">Zones currently off</span><strong id="zonesOff">—</strong><small><span class="status-dot off"></span>Power inactive</small></div></article>
+        </section>
+
+        <section class="workspace-grid">
+          <article class="panel tree-panel">
+            <div class="panel-heading">
+              <div><h2>City zones</h2><p>Browse your zone hierarchy</p></div>
+              <button type="button" class="icon-button subtle-button" id="treeMenuButton" aria-label="Zone tree options">•••</button>
+            </div>
+            <div class="tree-toolbar">
+              <label class="search-field">
+                <span aria-hidden="true">⌕</span>
+                <input id="zoneSearch" type="search" placeholder="Search zones..." autocomplete="off" aria-label="Search zones by name">
+                <kbd>/</kbd>
+              </label>
+              <div class="filter-row">
+                <label class="select-wrap"><span class="sr-only">Filter by zone type</span><select id="typeFilter"><option value="all">All types</option><option value="City">City</option><option value="District">District</option><option value="Street">Street</option><option value="Building">Building</option></select></label>
+                <label class="select-wrap"><span class="sr-only">Filter by power status</span><select id="statusFilter"><option value="all">All statuses</option><option value="ON">Power on</option><option value="OFF">Power off</option></select></label>
+              </div>
+              <div class="tree-controls"><span id="visibleCount">0 zones</span><div><button id="expandAllButton" type="button">Expand all</button><span>·</span><button id="collapseAllButton" type="button">Collapse all</button></div></div>
+            </div>
+            <div class="zone-tree" id="zoneTree" role="tree" aria-label="City zones"></div>
+            <div class="tree-footer"><span class="status-dot on"></span> Power on <span class="status-dot off"></span> Power off <span class="tree-updated">Sample hierarchy</span></div>
+          </article>
+
+          <div class="right-column">
+            <article class="panel details-panel">
+              <div class="panel-heading detail-heading">
+                <div><div class="panel-kicker">ZONE OVERVIEW</div><h2 id="selectedZoneName">Select a zone</h2><p id="selectedZoneSubtitle">Choose a zone from the hierarchy to view its details.</p></div>
+                <span class="zone-type-badge hidden" id="selectedZoneType"></span>
+              </div>
+              <div class="detail-grid" id="zoneDetails">
+                <div class="detail-empty"><span class="empty-selection-icon">⌖</span><strong>No zone selected</strong><span>Select a city, district, street, or building to get started.</span></div>
+              </div>
+            </article>
+
+            <article class="panel power-panel">
+              <div class="panel-heading power-heading">
+                <div><div class="panel-kicker">POWER MANAGEMENT</div><h2>Power controls</h2></div>
+                <span class="status-pill" id="powerStatusPill"><i></i><span>Select a zone</span></span>
+              </div>
+              <div class="power-content" id="powerContent">
+                <div class="power-empty"><span class="power-symbol">ϟ</span><p>Select a zone to view its power controls.</p></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel reports-panel" id="reportsSection">
+          <div class="reports-header">
+            <div><div class="panel-kicker">ENERGY INSIGHTS</div><h2>Energy usage reports</h2><p>Generate consumption reports for a selected zone and its descendant buildings.</p></div>
+            <span class="sample-notice"><span>i</span> Sample data · Not actual meter readings</span>
+          </div>
+          <form id="reportForm" class="report-form">
+            <div class="report-zone">
+              <span class="report-zone-icon">▥</span>
+              <div><span>REPORTING FOR</span><strong id="reportZoneName">Select a zone</strong><small id="reportZoneType">Zone details will appear here</small></div>
+            </div>
+            <label class="date-field"><span>Start date</span><input id="startDate" type="date" required></label>
+            <label class="date-field"><span>End date</span><input id="endDate" type="date" required></label>
+            <button type="submit" class="button button-primary" id="generateReportButton"><span aria-hidden="true">▤</span> Generate report</button>
+          </form>
+
+          <div class="report-output" id="reportOutput" aria-live="polite">
+            <div class="report-empty" id="reportEmpty">
+              <span class="report-empty-icon">▤</span>
+              <strong>Your energy report will appear here</strong>
+              <span>Select any zone, choose a date range, and generate a sample report.</span>
+            </div>
+            <div class="report-results hidden" id="reportResults">
+              <div class="report-summary-row">
+                <div class="consumption-card"><span class="consumption-icon">ϟ</span><div><span>Total energy consumption</span><strong id="totalConsumption">—</strong><small id="reportPeriod">—</small></div></div>
+                <div class="meter-summary"><div class="meter-summary-icon">◉</div><div><span>Meter readings</span><strong id="meterReadingCount">—</strong><small id="meterBuildingCount">—</small></div></div>
+                <div class="meter-summary"><div class="meter-summary-icon reading-icon">↗</div><div><span>Daily average</span><strong id="dailyAverage">—</strong><small>Across selected period</small></div></div>
+              </div>
+              <div class="report-chart-card">
+                <div class="chart-heading"><div><h3>Energy consumption</h3><p>Daily usage across the selected zone · kWh</p></div><span class="chart-legend"><i></i> Energy used</span></div>
+                <div class="chart-wrap"><canvas id="energyChart" role="img" aria-label="Sample daily energy consumption chart"></canvas></div>
+              </div>
+              <div class="readings-card">
+                <div class="readings-heading"><div><h3>Meter reading summary</h3><p>Sample readings by building in this zone</p></div><span id="readingRowsCount">—</span></div>
+                <div class="table-scroll"><table><thead><tr><th>Building</th><th>Meter ID</th><th>Readings</th><th>Consumption</th><th>Power status</th></tr></thead><tbody id="readingsTableBody"></tbody></table></div>
+              </div>
+            </div>
+          </div>
+          <div class="report-footnote"><span>i</span> This prototype uses simulated sample data. Connect to the existing Meter and MeterReadingRecod APIs to display verified readings.</div>
+        </section>
+        <footer class="page-footer"><span>© 2025 SmartCity360 · City infrastructure, connected.</span><span>Frontend prototype <i></i></span></footer>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="confirmationModal" role="presentation">
+    <section class="confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+      <button class="modal-close" id="modalCloseButton" type="button" aria-label="Close confirmation">×</button>
+      <span class="modal-icon" id="modalIcon">ϟ</span>
+      <div class="panel-kicker">CONFIRM POWER ACTION</div>
+      <h2 id="modalTitle">Shut down power?</h2>
+      <p id="modalDescription"></p>
+      <div class="modal-impact"><span>⚠</span><span id="modalImpactText"></span></div>
+      <div class="modal-actions"><button type="button" class="button button-secondary" id="cancelPowerButton">Cancel</button><button type="button" class="button button-danger" id="confirmPowerButton">Shut down power</button></div>
+    </section>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="zone-management.js"></script>
+</body>
+</html>
